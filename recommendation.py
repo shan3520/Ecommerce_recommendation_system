@@ -3,6 +3,15 @@ import streamlit as st
 from google import genai
 import requests
 
+PLACEHOLDER_IMAGE_URL = "https://via.placeholder.com/150"
+
+
+def resolve_image_url(raw_url):
+    """Return a safe product image URL for Streamlit rendering."""
+    if isinstance(raw_url, str) and raw_url.strip():
+        return raw_url
+    return PLACEHOLDER_IMAGE_URL
+
 def initialize_gemini_client():
     """Initialize Gemini client with multiple key sources"""
     api_key = (
@@ -133,7 +142,7 @@ def display_product_recommendation(refined_df):
             cols = st.columns([1, 3])
             with cols[0]:
                 st.image(
-                    row['primary_image_link'] or "https://via.placeholder.com/150",
+                    resolve_image_url(row['primary_image_link']),
                     width=200,
                     caption=row['brand']
                 )
